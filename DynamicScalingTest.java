@@ -4,29 +4,29 @@ public class DynamicScalingTest {
         int cores = Runtime.getRuntime().availableProcessors();
         System.out.println("Logical processors available: " + cores);
 
-        runTest(1);
-        runTest(cores);
-    }
-
-    public static void runTest(int threadCount) throws InterruptedException {
         int iterations = 10_000_000;
 
-        Thread[] threads = new Thread[threadCount];
+        long start1 = System.currentTimeMillis();
 
-        long startTime = System.currentTimeMillis();
+        Thread t1 = new Thread(new MathTask(0, iterations));
+        t1.start();
+        t1.join();
 
-        for (int i = 0; i < threadCount; i++) {
-            threads[i] = new Thread(new MathTask(i, iterations));
-            threads[i].start();
-        }
+        long end1 = System.currentTimeMillis();
 
-        for (Thread t : threads) {
+        System.out.println("Time with 1 thread: " + (end1 - start1) + " ms");
+
+        long startN = System.currentTimeMillis();
+
+        for (int i = 0; i < cores; i++) {
+            Thread t = new Thread(new MathTask(i, iterations));
+            t.start();
             t.join();
         }
 
-        long endTime = System.currentTimeMillis();
+        long endN = System.currentTimeMillis();
 
-        System.out.println("Time with " + threadCount + " thread(s): "
-                + (endTime - startTime) + " ms");
+        System.out.println("Time with " + cores + " sequential runs: "
+                + (endN - startN) + " ms");
     }
 }

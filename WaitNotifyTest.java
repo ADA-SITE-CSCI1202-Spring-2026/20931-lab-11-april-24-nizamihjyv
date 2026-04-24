@@ -9,7 +9,7 @@ public class WaitNotifyTest {
         consumer.start();
 
         try {
-            Thread.sleep(1000); // delay to show waiting behavior
+            Thread.sleep(1000); 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
