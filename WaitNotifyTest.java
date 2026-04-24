@@ -7,13 +7,6 @@ public class WaitNotifyTest {
         Thread producer = new Thread(new Producer(resource));
 
         consumer.start();
-
-        try {
-            Thread.sleep(1000); 
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-
         producer.start();
     }
 }
